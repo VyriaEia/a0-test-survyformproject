@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal Survey Form</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #20282b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    
+        .container {
+            width: 330px;
+            background: #111315;
+            padding: 28px 26px 34px;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+        }
+    
+        h1 {
+            color: #f5f1e8;
+            font-size: 36px;
+            margin: 0 0 6px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+    
+        p {
+            color: #c7c7c7;
+            font-size: 13px;
+            margin: 0 0 26px;
+            font-weight: bold;
+        }
+    
+        label {
+            display: block;
+            color: #f5f1e8;
+            font-size: 15px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+    
+        .form-group {
+            margin-bottom: 18px;
+        }
+    
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 13px;
+            background: #242b2e;
+            color: #f5f1e8;
+            font-size: 14px;
+            font-weight: bold;
+            box-sizing: border-box;
+            outline: none;
+        }
+    
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            background: #2f383c;
+        }
+    
+        fieldset {
+            border: none;
+            background: #242b2e;
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin: 0 0 18px;
+            box-sizing: border-box;
+        }
+    
+        legend {
+            color: #f5f1e8;
+            font-weight: 900;
+            font-size: 15px;
+            padding: 0;
+            margin-bottom: 12px;
+        }
+    
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 11px;
+        }
+    
+        .radio-option:last-child {
+            margin-bottom: 0;
+        }
+    
+        .radio-option input {
+            margin: 0;
+            width: 13px;
+            height: 13px;
+            accent-color: #f5f1e8;
+        }
+    
+        .radio-option label {
+            margin: 0;
+            color: #f5f1e8;
+            font-weight: 900;
+            font-size: 14px;
+            line-height: 1;
+        }
+    
+        textarea {
+            height: 76px;
+            resize: none;
+        }
+    
+        button {
+            width: 100%;
+            margin-top: 6px;
+            padding: 15px;
+            border: none;
+            border-radius: 13px;
+            background: #f5f1e8;
+            color: #111315;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+    
+        button:hover {
+            background: white;
+        }
+    
+        #message {
+            color: #f5f1e8;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Survey.</h1>
+        <p>answer honestly and keep it simple.</p>
+
+        <form id="googleForm">
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender">
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Prefer not to say</option>
+                    </select>
+                </div>
+            
+                <fieldset>
+                    <legend>Age Group</legend>
+            
+                    <div class="radio-option">
+                        <input type="radio" id="under18" name="ageGroup" value="Under 18">
+                        <label for="under18">Under 18</label>
+                    </div>
+            
+                    <div class="radio-option">
+                        <input type="radio" id="18-30" name="ageGroup" value="18-30">
+                        <label for="18-30">18-30</label>
+                    </div>
+            
+                    <div class="radio-option">
+                        <input type="radio" id="31-50" name="ageGroup" value="31-50">
+                        <label for="31-50">31-50</label>
+                    </div>
+            
+                    <div class="radio-option">
+                        <input type="radio" id="51plus" name="ageGroup" value="51+">
+                        <label for="51plus">51+</label>
+                    </div>
+                </fieldset>
+            
+                <div class="form-group">
+                    <label for="comments">Comments</label>
+                    <textarea id="comments" name="comments"></textarea>
+                </div>
+            
+                <button type="submit">SUBMIT</button>
+            
+                <div id="message"></div>
+            </form>
+    </div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxXjo30_Afa5dBcrWGBKFqlzkwH1fSyGakAdboUQffTlfQvr6jXvNnyanZb-D2l2Sx_9Q/exec";
+        const form = document.getElementById("googleForm");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            message.innerHTML = "Submitting...";
+
+            fetch(scriptURL, {
+                method: "POST",
+                mode: "no-cors",
+                body: new FormData(form)
+            })
+            .then(() => {
+                message.innerHTML = "Submitted successfully.";
+                form.reset();
+            })
+            .catch(error => {
+                message.innerHTML = "Something went wrong.";
+                console.error("Error!", error.message);
+            });
+        });
+    </script>
+
+</body>
+</html>
